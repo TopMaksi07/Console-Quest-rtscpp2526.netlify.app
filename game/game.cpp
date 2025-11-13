@@ -126,79 +126,79 @@ void goVillage()
 
 void fightEnemy()
 {
+    int wolf_health = 30;
 
+    cout << "В лесу на вас напал Волк!\n" << endl << endl;
+    cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
+
+    int choise2 = 0;
+
+    while (player_health > 0 && wolf_health > 0 && choise2 != 2)
+    {
+        cout << "Ваши действия:\n" << "1.Ударить\n" << "2.Убежать\n" << "3.Инвентарь\n";
+        cin >> choise2;
+        cout << "Ваш выбор: " << choise2 << endl;
+
+        switch (choise2)
+        {
+        case 1:
+        {
+            int i = rand() % 10 + 1;
+            wolf_health -= i;
+            cout << "Вы ударили Волка. Урон = " << i << endl;
+            i = rand() % 10 + 1;
+            player_health -= i;
+            cout << "Волк кусает вас. Урон = " << i << endl;
+            choise2 = 0;
+            break;
+        }
+        case 2:
+        {
+            cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
+            //choise2 = 0;
+            break;
+        }
+        case 3:
+        {
+            showInventory();
+            break;
+        }
+        default:
+            break;
+        }
+
+        if (player_health > 0 && wolf_health > 0)
+        {
+            cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
+        }
+        if (player_health <= 0)
+        {
+            cout << "Вы проиграли. Ваши характеристики: Здоровье: 0" << ", Золото: " << player_gold << endl << endl;
+            system("pause");
+            exit(0);
+            break;
+        }
+        if (wolf_health <= 0)
+        {
+            player_gold += 10;
+            cout << "Вы победили Волка! +10 золота\n";
+            cout << "Вы победили Волка! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
+
+            break;
+        }
+
+        if (choise2 == 2)
+        {
+            break;
+        }
+    }
 }
 void goForest()
 {
     int i = rand() % 2;
     if (i == 0)
     {
-        int wolf_health = 30;
-
-        cout << "В лесу на вас напал Волк!\n" << endl << endl;
-        cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
-
-        int choise2 = 0;
-
-        while (player_health > 0 && wolf_health > 0 && choise2 != 2)
-        {
-            cout << "Ваши действия:\n" << "1.Ударить\n" << "2.Убежать\n" << "3.Инвентарь\n";
-            cin >> choise2;
-            cout << "Ваш выбор: " << choise2 << endl;
-
-            switch (choise2)
-            {
-            case 1:
-            {
-                int i = rand() % 10 + 1;
-                wolf_health -= i;
-                cout << "Вы ударили Волка. Урон = " << i << endl;
-                i = rand() % 10 + 1;
-                player_health -= i;
-                cout << "Волк кусает вас. Урон = " << i << endl;
-                choise2 = 0;
-                break;
-            }
-            case 2:
-            {
-                cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
-                //choise2 = 0;
-                break;
-            }
-            case 3:
-            {
-                showInventory();
-                break;
-            }
-            default:
-                break;
-            }
-
-            if (player_health > 0 && wolf_health > 0)
-            {
-                cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
-            }
-            if (player_health <= 0)
-            {
-                cout << "Вы проиграли. Ваши характеристики: Здоровье: 0" << ", Золото: " << player_gold << endl << endl;
-                system("pause");
-                exit(0);
-                break;
-            }
-            if (wolf_health <= 0)
-            {
-                player_gold += 10;
-                cout << "Вы победили Волка! +10 золота\n";
-                cout << "Вы победили Волка! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
-
-                break;
-            }
-
-            if (choise2 == 2)
-            {
-                break;
-            }
-        }
+        fightEnemy();
     }
     else
     {
