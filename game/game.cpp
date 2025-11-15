@@ -22,7 +22,16 @@ void levelUp()
 	max_health += 15;
 	player_gold += 5;
 	xp = 0;
-    cout << "Вы повысили свой уровень. +15 к максимальному здоровью. +5 золота\n";
+    cout << "\n\tВы повысили свой уровень на " << player_level << ". +15 к максимальному здоровью. +5 золота\n";
+}
+
+void addXp(int i)
+{
+	xp += i;
+	if (xp >= 100)
+	{
+		levelUp();
+	}
 }
 
 int damage_max = 10;
@@ -119,7 +128,9 @@ void goVillage()
         {
             cout << "Ваше здоровье полное!" << endl;
         }
-        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
+        cout << "+10 опыта\n";
+        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
+        addXp(10);
         break;
     }
     case 2:
@@ -175,7 +186,7 @@ void fightEnemy()
         }
         case 2:
         {
-            cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
+            cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
             //choise2 = 0;
             break;
         }
@@ -203,8 +214,8 @@ void fightEnemy()
         {
             player_gold += 10;
             cout << "Вы победили Волка! +10 золота\n";
-            cout << "Вы победили Волка! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
-
+            cout << "Вы победили Волка! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << " +20 опыта" << ", Уровень: " << player_level << ", Опыт: " << xp  << endl << endl;
+            addXp(20);
             break;
         }
 
@@ -224,8 +235,9 @@ void goForest()
     else
     {
         player_gold += 5;
-        cout << "Вы вошли в лес. +5 золота\n";
-        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
+        cout << "Вы вошли в лес. +5 золота\n" << " +5 опыта";
+        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp  << endl << endl;
+        addXp(5);
     }
 }
 
@@ -259,7 +271,7 @@ int main()
             cin >> player_name;
             cout << " " << endl;
             cout << "Добро пожаловать " << player_name << "!" << endl;
-            cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << endl << endl;
+            cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Урон(min-max): " << damage_min << "-" << damage_max << endl << endl;
 
             while (true) 
             {
@@ -267,6 +279,7 @@ int main()
                 cout << "1. Пойти в деревню\n";
 				cout << "2. Пойти в лес\n";
                 cout << "3. Показать инвентарь\n";
+                cout << "4. Показать характеристики\n";
 				int choise1;
 				cin >> choise1;
 				cout << "Ваш выбор: " << choise1 << endl;
@@ -288,6 +301,9 @@ int main()
                     showInventory();
                     break;
                 }
+                case 4:
+                    cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
+                    break;
                 default:
 					break;
 				}
