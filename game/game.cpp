@@ -11,6 +11,23 @@ string inventory[5];
 string player_name;
 int player_health = 85;
 int player_gold = 10;
+
+int xp = 0;
+int player_level = 1;
+int max_health = 100;
+
+void levelUp()
+{
+	player_level++;
+	max_health += 15;
+	player_gold += 5;
+	xp = 0;
+    cout << "Вы повысили свой уровень. +15 к максимальному здоровью. +5 золота\n";
+}
+
+int damage_max = 10;
+int damage_min = 5;
+
 void addtoinv(string item)
 {
     int a = 0;
@@ -29,14 +46,10 @@ void addtoinv(string item)
         {
             cout << "Инвентарь полон\n";
         }
-
     }
-
-    
 }
 void useitem(int inv_id)
 {
-	
     if (inventory[inv_id] == "Яблоко")
     {
         if (player_health < 100)
@@ -143,10 +156,18 @@ void fightEnemy()
         {
         case 1:
         {
-            int i = rand() % 10 + 1;
+            int i = rand() % damage_max + 1;
+            if (i <= damage_min)
+            {
+                i = damage_min;
+            }
             wolf_health -= i;
             cout << "Вы ударили Волка. Урон = " << i << endl;
-            i = rand() % 10 + 1;
+            i = rand() % damage_max + 1;
+            if (i <= damage_min)
+            {
+				i = damage_min;
+            }
             player_health -= i;
             cout << "Волк кусает вас. Урон = " << i << endl;
             choise2 = 0;
