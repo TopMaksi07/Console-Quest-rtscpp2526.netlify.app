@@ -16,6 +16,10 @@ int xp = 0;
 int player_level = 1;
 int max_health = 100;
 
+bool quest = false;
+
+string enemy[2] = { "Волк", "Разбойник" };
+
 void levelUp()
 {
 	player_level++;
@@ -27,6 +31,7 @@ void levelUp()
 
 void addXp(int i)
 {
+    cout << "\n +" << i << " опыта.\n";
 	xp += i;
 	if (xp >= 100)
 	{
@@ -61,12 +66,12 @@ void useitem(int inv_id)
 {
     if (inventory[inv_id] == "Яблоко")
     {
-        if (player_health < 100)
+        if (player_health < max_health)
         {
-            if (player_health > 80)
+            if (player_health > max_health - 20)
             {
-                cout << "+" << (100 - player_health) << " здоровья\n";
-                player_health += (100 - player_health);
+                cout << "+" << (max_health  - player_health) << " здоровья\n";
+                player_health += (max_health - player_health);
             }
             else
             {
@@ -104,18 +109,19 @@ void goVillage()
     int choise4;
     cout << "1. Отдохнуть в деревне\n";
     cout << "2. Купить яблоко(2 золота)\n";
+    cout << "3. Взять квест у Старейшины\n";
     cin >> choise4;
     switch (choise4)
     {
     case 1:
     {
         cout << "Ваш выбор: " << choise4 << endl;
-        if (player_health < 100)
+        if (player_health < max_health)
         {
-            if (player_health > 90)
+            if (player_health > (max_health - 10))
             {
-                cout << "Вы отдохнули в деревне. +" << (100 - player_health) << " здоровья\n";
-                player_health += (100 - player_health);
+                cout << "Вы отдохнули в деревне. +" << (max_health - player_health) << " здоровья\n";
+                player_health += (max_health - player_health);
             }
             else
             {
@@ -128,9 +134,9 @@ void goVillage()
         {
             cout << "Ваше здоровье полное!" << endl;
         }
-        cout << "+10 опыта\n";
-        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
         addXp(10);
+        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
+        
         break;
     }
     case 2:
@@ -143,101 +149,205 @@ void goVillage()
             break;
         }
     }
+    case 3:
+        if (quest == false)
+        {
+            cout << "Старейшина: Победи разбойника...\n";
+			quest = true;
+        }
+        else
+        {
+			cout << "Вы уже взяли квест у Старейшины\n";
+        }
+        
+
+        break;
     default:
         break;
     }
 }
 
-void fightEnemy()
+void fightEnemy(string enemy_name)
 {
     int wolf_health = 30;
-
-    cout << "В лесу на вас напал Волк!\n" << endl << endl;
-    cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
+    int bandit_health = 50;
 
     int choise2 = 0;
 
-    while (player_health > 0 && wolf_health > 0 && choise2 != 2)
+    if (enemy_name == "Волк")
     {
-        cout << "Ваши действия:\n" << "1.Ударить\n" << "2.Убежать\n" << "3.Инвентарь\n";
-        cin >> choise2;
-        cout << "Ваш выбор: " << choise2 << endl;
+        cout << "В лесу на вас напал Волк!\n" << endl << endl;
+        cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
 
-        switch (choise2)
+        while (player_health > 0 && wolf_health > 0 && choise2 != 2)
         {
-        case 1:
-        {
-            int i = rand() % damage_max + 1;
-            if (i <= damage_min)
+            cout << "Ваши действия:\n" << "1.Ударить\n" << "2.Убежать\n" << "3.Инвентарь\n";
+            cin >> choise2;
+            cout << "Ваш выбор: " << choise2 << endl;
+
+            switch (choise2)
             {
-                i = damage_min;
-            }
-            wolf_health -= i;
-            cout << "Вы ударили Волка. Урон = " << i << endl;
-            i = rand() % damage_max + 1;
-            if (i <= damage_min)
+            case 1:
             {
-				i = damage_min;
+                int i = rand() % damage_max + 1;
+                if (i <= damage_min)
+                {
+                    i = damage_min;
+                }
+                wolf_health -= i;
+                cout << "Вы ударили Волка. Урон = " << i << endl;
+                i = rand() % damage_max + 1;
+                if (i <= damage_min)
+                {
+                    i = damage_min;
+                }
+                player_health -= i;
+                cout << "Волк кусает вас. Урон = " << i << endl;
+                choise2 = 0;
+                break;
             }
-            player_health -= i;
-            cout << "Волк кусает вас. Урон = " << i << endl;
-            choise2 = 0;
-            break;
-        }
-        case 2:
-        {
-            cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
-            //choise2 = 0;
-            break;
-        }
-        case 3:
-        {
-            showInventory();
-            break;
-        }
-        default:
-            break;
-        }
+            case 2:
+            {
+                cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
+                //choise2 = 0;
+                break;
+            }
+            case 3:
+            {
+                showInventory();
+                break;
+            }
+            default:
+                break;
+            }
 
-        if (player_health > 0 && wolf_health > 0)
-        {
-            cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
-        }
-        if (player_health <= 0)
-        {
-            cout << "Вы проиграли. Ваши характеристики: Здоровье: 0" << ", Золото: " << player_gold << endl << endl;
-            system("pause");
-            exit(0);
-            break;
-        }
-        if (wolf_health <= 0)
-        {
-            player_gold += 10;
-            cout << "Вы победили Волка! +10 золота\n";
-            cout << "Вы победили Волка! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << " +20 опыта" << ", Уровень: " << player_level << ", Опыт: " << xp  << endl << endl;
-            addXp(20);
-            break;
-        }
+            if (player_health > 0 && wolf_health > 0)
+            {
+                cout << "Здоровье Волка: " << wolf_health << "| Ваше здоровье: " << player_health << endl << endl;
+            }
+            if (player_health <= 0)
+            {
+                cout << "Вы проиграли. Ваши характеристики: Здоровье: 0" << ", Золото: " << player_gold << endl << endl;
+                system("pause");
+                exit(0);
+                break;
+            }
+            if (wolf_health <= 0)
+            {
+                player_gold += 10;
+                cout << "Вы победили Волка! +10 золота\n";
+                addXp(20);
+                cout << "Вы победили Волка! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
 
-        if (choise2 == 2)
-        {
-            break;
+                break;
+            }
+
+            if (choise2 == 2)
+            {
+                break;
+            }
         }
     }
+    if (enemy_name == "Разбойник")
+	{
+		cout << "В лесу на вас напал Разбойник!\n" << endl << endl;
+		cout << "Здоровье Разбойника: " << bandit_health << "| Ваше здоровье: " << player_health << endl << endl;
+
+        while (player_health > 0 && bandit_health > 0 && choise2 != 2)
+        {
+            cout << "Ваши действия:\n" << "1.Ударить\n" << "2.Убежать\n" << "3.Инвентарь\n";
+            cin >> choise2;
+            cout << "Ваш выбор: " << choise2 << endl;
+
+            switch (choise2)
+            {
+            case 1:
+            {
+                int i = rand() % damage_max + 1;
+                if (i <= damage_min)
+                {
+                    i = damage_min;
+                }
+                bandit_health -= i;
+                cout << "Вы ударили Разбойника. Урон = " << i << endl;
+                i = rand() % damage_max + 1;
+                if (i <= damage_min)
+                {
+                    i = damage_min;
+                }
+                player_health -= i;
+                cout << "Разбойник ударяет вас. Урон = " << i << endl;
+                choise2 = 0;
+                break;
+            }
+            case 2:
+            {
+                cout << "Вы убежали. Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
+                //choise2 = 0;
+                break;
+            }
+            case 3:
+            {
+                showInventory();
+                break;
+            }
+            default:
+                break;
+            }
+
+            if (player_health > 0 && bandit_health > 0)
+            {
+                cout << "Здоровье Разбойника: " << bandit_health << "| Ваше здоровье: " << player_health << endl << endl;
+            }
+            if (player_health <= 0)
+            {
+                cout << "Вы проиграли. Ваши характеристики: Здоровье: 0" << ", Золото: " << player_gold << endl << endl;
+                system("pause");
+                exit(0);
+                break;
+            }
+            if (bandit_health <= 0)
+            {
+                player_gold += 20;
+                cout << "Вы победили Разбойника! +20 золота\n";
+                addXp(20);
+                cout << "Вы победили Разбойника! Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp << endl << endl;
+                if (quest == true)
+                {
+					quest = false;
+                    cout << "Квест выполнен!\n";
+					cout << "+20 золота и Меч.\n";
+                    player_gold += 20;
+					inventory[0] = "Меч";
+                }
+                break;
+            }
+
+            if (choise2 == 2)
+            {
+                break;
+            }
+        }
+	}
+    
+
+    
 }
 void goForest()
 {
     int i = rand() % 2;
     if (i == 0)
     {
-        fightEnemy();
+        int r = rand() % 2;
+        fightEnemy(enemy[r]);
     }
     else
     {
         player_gold += 5;
-        cout << "Вы вошли в лес. +5 золота\n" << " +5 опыта";
-        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp  << endl << endl;
+        cout << "Вы вошли в лес. +5 золота\n";
         addXp(5);
+        cout << "Ваши характеристики: Здоровье: " << player_health << ", Золото: " << player_gold << ", Уровень: " << player_level << ", Опыт: " << xp  << endl << endl;
+        
     }
 }
 
